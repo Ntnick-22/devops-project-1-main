@@ -34,8 +34,18 @@ module "ec2" {
   enable_public_ip_address = true
   user_data_install_apache = templatefile("./template/ec2_python_application_install.sh", {})
 }
+module "rds_db_instance" {
+  source               = "./rds"
+  db_subnet_group_name = "dev_proj_1_rds_subnet_group"
+  subnet_groups        = tolist(module.networking.dev_proj_1_public_subnets)
+  rds_mysql_sg_id      = module.security_group.rds_mysql_sg_id
+  mysql_db_identifier  = "mydb"
+  mysql_username       = "dbuser"
+  mysql_password       = "dbpassword"
+  mysql_dbname         = "devprojdb"
+}
 
-/*module "lb_target_group" {
+module "lb_target_group" {
   source                   = "./load-balancer-target-group"
   lb_target_group_name     = "dev-proj-1-lb-target-group"
   lb_target_group_port     = 5000
@@ -49,8 +59,8 @@ module "alb" {
   lb_name                   = "dev-proj-1-alb"
   is_external               = false
   lb_type                   = "application"
-  sg_enable_ssh_https       = module.security_group.sg_ec2_sg_ssh_http_id
-  subnet_ids                = tolist(module.networking.dev_proj_1_public_subnets)
+  sg_enable_ssh_https       ="sg-0c17a70368abe5205"
+   subnet_ids                = ["subnet-0e13ad39857fbf267", "subnet-0e5492c2fe83115d2"]  # Use specific subnets from correct VPC
   tag_name                  = "dev-proj-1-alb"
   lb_target_group_arn       = module.lb_target_group.dev_proj_1_lb_target_group_arn
   ec2_instance_id           = module.ec2.dev_proj_1_ec2_instance_id
@@ -76,13 +86,3 @@ module "aws_ceritification_manager" {
   hosted_zone_id = module.hosted_zone.hosted_zone_id
 }
 
-module "rds_db_instance" {
-  source               = "./rds"
-  db_subnet_group_name = "dev_proj_1_rds_subnet_group"
-  subnet_groups        = tolist(module.networking.dev_proj_1_public_subnets)
-  rds_mysql_sg_id      = module.security_group.rds_mysql_sg_id
-  mysql_db_identifier  = "mydb"
-  mysql_username       = "dbuser"
-  mysql_password       = "dbpassword"
-  mysql_dbname         = "devprojdb"
-}*/
