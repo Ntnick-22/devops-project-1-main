@@ -2,7 +2,15 @@ variable "domain_name" {}
 variable "hosted_zone_id" {}
 
 output "dev_proj_1_acm_arn" {
-  value = aws_acm_certificate.dev_proj_1_acm_arn.arn
+  value = aws_acm_certificate_validation.dev_proj_1_acm_validation.certificate_arn
+}
+resource "aws_acm_certificate_validation" "dev_proj_1_acm_validation" {
+  certificate_arn         = aws_acm_certificate.dev_proj_1_acm_arn.arn
+  validation_record_fqdns = [for record in aws_route53_record.validation : record.fqdn]
+  
+  timeouts {
+    create = "5m"
+  }
 }
 
 resource "aws_acm_certificate" "dev_proj_1_acm_arn" {
@@ -14,7 +22,7 @@ resource "aws_acm_certificate" "dev_proj_1_acm_arn" {
   }
 
   lifecycle {
-    create_before_destroy = false
+    create_before_destroy = true
   }
 }
 

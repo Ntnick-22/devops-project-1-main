@@ -14,4 +14,4 @@ ec2_ami_id     = "ami-0a116fa7c861dd5f9"
 
 ec2_user_data_install_apache = ""
 
-domain_name = "nt-nick.link"
+domain_name = "app.nt-nick.link"
