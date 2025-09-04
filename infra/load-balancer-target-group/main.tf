@@ -22,7 +22,7 @@ resource "aws_lb_target_group" "dev_proj_1_lb_target_group" {
     interval = 5
     matcher = "200"  # has to be HTTP 200 or fails
   }
-}
+} 
 
 resource "aws_lb_target_group_attachment" "dev_proj_1_lb_target_group_attachment" {
   target_group_arn = aws_lb_target_group.dev_proj_1_lb_target_group.arn

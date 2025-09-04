@@ -13,7 +13,7 @@ resource "aws_db_subnet_group" "dev_proj_1_db_subnet_group" {
 }
 
 resource "aws_db_instance" "default" {
-  allocated_storage       = 10
+  allocated_storage       = 20
   storage_type            = "gp2"
   engine                  = "mysql"
 
